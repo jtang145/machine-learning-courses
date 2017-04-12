@@ -129,4 +129,6 @@ def PredictTrials(X, y, fitter, data):
         print "Trial {}: ${:,.2f}".format(k+1, pred)
 
     # Display price range
+    print "\nMax prices prices: ${:,.2f}".format(max(prices))
+    print "\nMin prices prices: ${:,.2f}".format(min(prices))
     print "\nRange in prices: ${:,.2f}".format(max(prices) - min(prices))
