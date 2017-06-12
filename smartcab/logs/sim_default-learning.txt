@@ -1,0 +1,10 @@
+/-----------------------------------------
+| State-action rewards from Q-Learning
+\-----------------------------------------
+
+('light', 'oncoming', 'waypoint')
+ -- forward : -321.13
+ -- right : -12.41
+ -- None : -15.50
+ -- left : -503.97
+

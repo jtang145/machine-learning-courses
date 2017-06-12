@@ -42,6 +42,9 @@ class LearningAgent(Agent):
         if testing:
             self.epsilon = 0
             self.alpha = 0
+        else:
+            self.epsilon = self.epsilon - 0.05
+			
         return None
 
     def build_state(self):
@@ -58,7 +61,8 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set 'state' as a tuple of relevant data for the agent
-        state = tuple(sorted(inputs.items()))
+        #state = tuple(sorted(inputs.items()))
+        state = tuple({'light': inputs['light'], 'oncoming':inputs['oncoming'],'waypoint':waypoint})
 
         return state
 
@@ -71,10 +75,21 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-
+        state_dict = self.Q.get(state,None)
+        if state_dict == None:
+            return (None, None)
+        q_max = -99999
+        action_max = None
+        for q_action in self.valid_actions:
+			q = state_dict.get(q_action, 0.0)
+			if(q > q_max):
+				q_max = q
+				action_max = q_action
         maxQ = None
+        if q_max > 0:
+			maxQ = q_max
 
-        return maxQ
+        return (maxQ, action_max)
 
 
     def createQ(self, state):
@@ -116,12 +131,9 @@ class LearningAgent(Agent):
         if random.random() < self.epsilon:
             return action
         else:
-            q_max = -99999
-            for q_action in self.valid_actions:
-                q = self.Q[state][action]
-                if(q > q_max):
-                    q_max = q
-                    action = q_action
+			max_q,max_action = self.get_maxQ(state)
+			# if max_action != None:
+			action = max_action
 
         return action
 
@@ -175,13 +187,13 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning = True, epsilon = 0.5)
+    agent = env.create_agent(LearningAgent, learning = True, epsilon = 1)
 
     ##############
     # Follow the driving agent
     # Flags:
     #   enforce_deadline - set to True to enforce a deadline metric
-    env.set_primary_agent(agent,enforce_deadline = False)
+    env.set_primary_agent(agent,enforce_deadline = True)
 
     ##############
     # Create the simulation
@@ -190,7 +202,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.05, log_metrics=True, display=True)
+    sim = Simulator(env, update_delay=0.01, log_metrics=True, display=True)
 
     ##############
     # Run the simulator
