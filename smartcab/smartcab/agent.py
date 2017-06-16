@@ -55,7 +55,7 @@ class LearningAgent(Agent):
             self.alpha = 0
         else:
             #self.epsilon = self.epsilon - 0.05
-            self.epsilon = math.pow(math.e, -0.05 * self.trial_count)
+            self.epsilon = math.pow(math.e, -0.02 * self.trial_count)
 
         return None
 
@@ -88,21 +88,19 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-        action_max = random.choice(self.env.valid_actions)
-        q_max = -99999
+        random_action = random.choice(self.env.valid_actions)
 
         state_dict = self.Q.get(state,None)
         if state_dict == None:
-            return (self.default_q_value, action_max)
+            return (self.default_q_value, random_action)
 
         q_max = max(state_dict.values())
         max_q_actions = [k for k,v in state_dict.items() if v == q_max]
-        if len(max_q_actions) > 1 and (random.random() < 0.5):
-            return (q_max, random.choice(max_q_actions))
+        # with a 0.2 possibility to use waypoint when there are multiple actions of same Q value:
+        if len(max_q_actions) > 1 and (random.random() < 0.2):
+            return (q_max, self.next_waypoint)
         else:
             return (q_max, max_q_actions[0])
-        print "Get max value as: {}".format(action_max)
-        return (q_max, action_max)
 
 
     def createQ(self, state):
@@ -167,6 +165,7 @@ class LearningAgent(Agent):
             return
         # Q-learing
         max_q = self.Q[state][action]
+        #estimation = self.pre_reward + self.gamma * max_q
         estimation = self.pre_reward
         q_pre = self.Q[self.pre_state][self.pre_action]
         self.Q[self.pre_state][self.pre_action] = (1 - self.alpha) * q_pre +  self.alpha * estimation
