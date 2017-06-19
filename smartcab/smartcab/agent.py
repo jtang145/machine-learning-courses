@@ -90,19 +90,8 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-        random_action = random.choice(self.env.valid_actions)
+        return max(self.Q[state].values())
 
-        state_dict = self.Q.get(state,None)
-        if state_dict == None:
-            return (self.default_q_value, random_action)
-
-        q_max = max(state_dict.values())
-        max_q_actions = [k for k,v in state_dict.items() if v == q_max]
-        # with a 0.2 possibility to use waypoint when there are multiple actions of same Q value:
-        if len(max_q_actions) > 1 and (random.random() < 0.2):
-            return (q_max, self.next_waypoint)
-        else:
-            return (q_max, max_q_actions[0])
 
 
     def createQ(self, state):
@@ -136,18 +125,23 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        action = random.choice(self.valid_actions)
+        random_action = random.choice(self.valid_actions)
         # 1, random, no learning
         if not self.learning:
-           return action
+           return random_action
         # 2, learning
         if random.random() < self.epsilon:
             print "++++ action by random for {} trial".format(self.trial_count)
-            return action
+            return random_action
         else:
             print "++++ action from max-q for {} trial".format(self.trial_count)
-            max_q,max_action = self.get_maxQ(state)
-            return max_action
+            state_actions = self.Q[state]
+            max_q = self.get_maxQ(state)
+            max_q_actions = [k for k,v in state_actions.items() if v == max_q]
+            if len(max_q_actions) > 1:
+                return random.choice(max_q_actions)
+            else:
+                return max_q_actions[0]
 
 
     def learn(self, state, action, reward):
@@ -222,7 +216,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.01, log_metrics=True, display = True, optimized = True)
+    sim = Simulator(env, update_delay=0.01, log_metrics=True, display = False, optimized = True)
 
     ##############
     # Run the simulator
