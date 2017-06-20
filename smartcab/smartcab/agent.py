@@ -58,8 +58,7 @@ class LearningAgent(Agent):
         else:
             #self.epsilon = self.epsilon - 0.05
             self.epsilon = math.pow(math.e, -0.02 * self.trial_count)
-            if self.alpha > 0.005:
-                self.alpha = self.alpha - 0.002
+            self.alpha = self.alpha - 0.002
 
         return None
 
@@ -215,7 +214,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.01, log_metrics=True, display = True, optimized = True)
+    sim = Simulator(env, update_delay=0.01, log_metrics=True, display = False, optimized = True)
 
     ##############
     # Run the simulator
