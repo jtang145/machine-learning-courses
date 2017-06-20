@@ -139,10 +139,7 @@ class LearningAgent(Agent):
             state_actions = self.Q[state]
             max_q = self.get_maxQ(state)
             max_q_actions = [k for k,v in state_actions.items() if v == max_q]
-            if len(max_q_actions) > 1:
-                return random.choice(max_q_actions)
-            else:
-                return max_q_actions[0]
+            return random.choice(max_q_actions)
 
 
     def learn(self, state, action, reward):
