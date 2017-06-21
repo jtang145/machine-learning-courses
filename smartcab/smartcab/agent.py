@@ -160,10 +160,13 @@ class LearningAgent(Agent):
             return
         # Q-learing
         max_q = self.Q[state][action]
-        #estimation = self.pre_reward + self.gamma * max_q
+        # estimation = self.pre_reward + self.gamma * max_q
         estimation = self.pre_reward
         q_pre = self.Q[self.pre_state][self.pre_action]
-        self.Q[self.pre_state][self.pre_action] = (1 - self.alpha) * q_pre +  self.alpha * estimation
+        # self.Q[self.pre_state][self.pre_action] = (1 - self.alpha) * q_pre +  self.alpha * estimation
+
+        # update directly, since we don't use gamma
+        self.Q[state][action] = (1 - self.alpha) * self.Q[state][action] +  self.alpha * reward
         return
 
 
