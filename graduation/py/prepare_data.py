@@ -33,7 +33,8 @@ def csv2dictsWithSplitDate(csvfile):
             #print(row[2])
         item = {key: value for key, value in zip(keys, row)}
         data.append(item)
-        item["tm_date"]= tm.strptime(row[2],"%Y-%m-%d")
+        item["tm_date"] = tm.strptime(row[2],"%Y-%m-%d")
+        item["tm_time"] = item["tm_date"].time()
     return data
 
 def set_nan_as_string(data, replace_str='0'):
