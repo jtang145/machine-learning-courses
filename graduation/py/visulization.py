@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 import datetime
+import matplotlib.pyplot as plt
+import math
+
+#%matplotlib inline
 
 def load_data():
     # Sales Data
@@ -13,7 +17,22 @@ def load_data():
     return data
 
 # View 'size' of store's
-def viewSalesData(data, keys=[], size = 10):
+def viewSalesDataOverTime(data, group, size = 10):
     stores = np.random.choice(len(data['Store'].unique()),size)
-    view_frames = frame.drop(['Customers','Open','Promo','StateHoliday','SchoolHoliday'], axis =1)
+    view_frames = data.drop(['Customers','Open','Promo','SchoolHoliday','StateHoliday'], axis =1)
+    cols = 3
+    rows = math.ceil(size / cols)
+    fig, axes = plt.subplots(nrows= rows, ncols= cols)
+    count = 0
     for i in stores:
+        count = count + 1
+        temp_store = view_frames[view_frames.Store == i]
+        temp_store.index = temp_store['Date']
+        temp_store = temp_store.resample(group).sum()
+        plot_row_index = math.ceil(count / cols) - 1
+        plot_col_index = count - plot_row_index * cols -1
+        temp_store.plot(kind='line',x=temp_store.index,y='Sales',
+            title = "Store_{0}".format(i), ax = axes[plot_row_index,plot_col_index])
+
+def viewSalesData(data, group, size = 10):
+    pass
