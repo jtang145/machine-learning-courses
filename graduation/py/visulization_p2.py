@@ -17,37 +17,6 @@ def load_data():
     data.fillna('0')
     return data
 
-# View 'size' of store's
-# group: The supported group catagory, refer to https://chrisalbon.com/python/pandas_group_data_by_time.html
-# aggregation: the aggregation method: sum, mean
-# size: the Store counts to be viewed, pick up randomly
-def viewSalesDataOverTime(data, group, aggregation= 'sum', size = 10):
-    stores = np.random.choice(len(data['Store'].unique()),size)
-    view_frames = data.drop(['Customers','Open','Promo','SchoolHoliday','StateHoliday'], axis =1)
-    cols = 3
-    rows = int(math.ceil(size / cols))
-    rows = rows if rows > 0 else 0
-    print "row: %d, col: %s" % (rows, cols)
-    #fig, axes = plt.subplots(nrows = rows, ncols = cols)
-    count = 0
-    for i in stores:
-        count = count + 1
-        temp_store = view_frames[view_frames.Store == i]
-        temp_store.index = temp_store['Date']
-        if aggregation == 'sum':
-            temp_store = temp_store.resample(group).sum()
-        elif aggregation == 'mean':
-            temp_store = temp_store.resample(group).mean()
-        else:
-            print "Not supported aggregation type: " + aggregation
-            return
-        plot_row_index = int(math.ceil(count / cols) - 1)
-        #plot_row_index = plot_row_index if plot_row_index > 0 else 0
-        plot_col_index = int(count - plot_row_index * cols - 1)
-        #print "plot row: %d, col: %d" % (plot_row_index, plot_col_index)
-        #temp_store.plot(kind='line',x=temp_store.index,y='Sales',
-        #    title = "Store_{0}".format(i), ax = axes[plot_row_index,plot_col_index])
-
 def dateplot(x, y, **kwargs):
     ax = plt.gca()
     data = kwargs.pop("data")
@@ -86,33 +55,14 @@ def viewStoreData(data, stores,group, aggregation = 'sum'):
     for i in stores:
         count = count + 1
         temp_store = select_store(data, i,group,aggregation)
-        temp_store.reset_index(inplace = True)
+        temp_store.reset_index(inplace = True, drop = False)
+        # debug info
+        #print "store %s " % i
+        #print temp_store.head(2)
         plot_datas = plot_datas.append(temp_store)
     plot_datas.sort_values("Date", ascending= True,inplace= True)
+    # debug info
+    #print plot_datas.head(2)
     g = sns.FacetGrid(plot_datas, col="Store", col_wrap = cols, size=2.5)
     g = g.map_dataframe(dateplot, "Date", "Sales")
     return stores
-
-
-def seaborn_plot(df):
-    import seaborn as sns
-
-    sns.set(style="ticks")
-
-    #print(df)
-
-    # Initialize a grid of plots with an Axes for each walk
-    grid = sns.FacetGrid(df, col="Store", hue="Store", col_wrap=5, size=2.0)
-
-    # Draw a horizontal line to show the starting point
-    grid.map(plt.axhline, y=0, ls=":", c=".5")
-
-    # Draw a line plot to show the trajectory of each random walk
-    grid.map(plt.plot, "Date", "Sales", marker="o", ms=4)
-
-    # Adjust the tick positions and labels
-    grid.set(xticks=np.arange(5), yticks=[-3, 3],
-             xlim=(-.5, 4.5), ylim=(-3.5, 3.5))
-
-    # Adjust the arrangement of the plots
-    grid.fig.tight_layout(w_pad=1)
