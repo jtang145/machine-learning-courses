@@ -34,10 +34,7 @@ class Model(object):
 
     def evaluate(self, X_val, y_val):
         assert(min(y_val) > 0)
-        guessed_sales = self.predict(X_val)
-        relative_err = numpy.absolute((y_val - guessed_sales) / y_val)
-        result = numpy.sum(relative_err) / len(y_val)
-        return result
+        return self.model.evaluate(self.preprocessing(X_val), self._val_for_fit(y_val),batch_size = 64)
 
 class Enbedding_Network(Model):
     def __init__(self, X_train, y_train, X_val, y_val, epoch = 5):
@@ -106,7 +103,8 @@ class Enbedding_Network(Model):
                        nb_epoch=self.epoch, batch_size=128,
                        # callbacks=[self.checkpointer],
                        )
-        print("Result for validation dataset: ", self.evaluate(X_val, y_val))
+        print("\r Error rate for validation dataset: ", self.evaluate(X_val, y_val))
+        print("")
 
 
     def _val_for_fit(self, val):

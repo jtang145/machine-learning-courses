@@ -66,6 +66,7 @@ def read_data_as_dicts():
         data = csv.reader(csvfile, delimiter=',')
         with open('train_data.pickle', 'wb') as f:
             data = csv2dicts(data)
+            # Let order by date descending
             data = data[::-1]
             pickle.dump(data, f, -1)
             print("3 samples:")
