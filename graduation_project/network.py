@@ -89,7 +89,7 @@ class Enbedding_Network(Model):
         self.model.add(Dense(1))
         self.model.add(Activation('sigmoid'))
 
-        # TODO: RMSPE implementation
+        # TODO: try RMSPE implementation
         self.model.compile(loss='mean_absolute_error', optimizer='adam')
 
 
