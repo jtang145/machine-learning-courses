@@ -1,6 +1,0 @@
-Reference:
-http://www.chinaaet.com/article/15625
-https://github.com/Cospel/kaggle-rossmann
-https://www.sohu.com/a/160158400_826434
-BP????:http://www.cnblogs.com/Finley/p/5946000.html
-Time series prediction:http://www.obitko.com/tutorials/neural-network-prediction/neural-network-training.html
