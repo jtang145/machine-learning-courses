@@ -111,7 +111,7 @@ def map_distance_type(distance):
     #
     if distance <= 50:
         return 'close'
-    elif distance <- 200:
+    elif distance <= 200:
         return 'near'
     elif distance <= 1000:
         return 'normal'
