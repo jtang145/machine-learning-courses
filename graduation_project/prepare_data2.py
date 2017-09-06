@@ -95,7 +95,28 @@ def read_data_as_dicts():
 def toString():
     return "This is prepare_data file."
 
+def set_cd(store_data, store_id, record):
+    store_info = store_data[['Store'] == store_id]
+    c_year = store_info['CompetitionOpenSinceYear']
+    c_month = store_info['CompetitionOpenSinceMonth']
+    dt = datetime.strptime(record['Date'], '%Y-%m-%d')
+    year = dt.year
+    month = dt.month
+    if year < int(c_year) and month < int(c_month):
+        return 0
+    return store_data[store_id - 1]['CompetitionDistance']
 
+def map_distance_type(distance):
+    # competition distance type:  < 50 ~ close, (50, 200] ~ near, (200, 1000] ~ normal, (1000, ~) ~ far
+    #
+    if distance <= 50:
+        return 'close'
+    elif distance <- 200:
+        return 'near'
+    elif distance <= 1000:
+        return 'normal'
+    elif distance > 1000:
+        return 'far'
 
 def feature_list(store_data, record):
     dt = datetime.strptime(record['Date'], '%Y-%m-%d')
@@ -111,6 +132,10 @@ def feature_list(store_data, record):
 
     promo = int(record['Promo'])
 
+    competitionDistance = set_cd(store_data, store_index, record)
+
+    comp_type = map_distance_type(int(competitionDistance))
+
     return [store_open,
             store_index,
             day_of_week,
@@ -118,7 +143,7 @@ def feature_list(store_data, record):
             year,
             month,
             day,
-            store_data[store_index - 1]['State']
+            comp_type
             ]
 
 def prepare_data_for_process():
@@ -161,7 +186,3 @@ def prepare_data_for_process():
         pickle.dump((train_data_X, train_data_y), f, -1)
     print(train_data_X[0], train_data_y[0])
     return train_data_X, train_data_y
-
-def prepare_data():
-    read_data_as_dicts()
-    prepare_data_for_process()
