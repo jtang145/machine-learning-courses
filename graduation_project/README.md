@@ -24,3 +24,6 @@ python prepare_data.py
 
  2. 训练并执行模型
 python model.py
+
+## 运行效果
+其他运行效果示图可参看report.html
