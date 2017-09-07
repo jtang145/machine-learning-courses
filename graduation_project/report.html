@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
-<title>rossmann-prediction-notebook</title>
+<title>rossmann-report</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -11755,8 +11755,8 @@ div#notebook {
 <p><strong>环境要求：</strong></p>
 <ul>
 <li>Python 3.x</li>
-<li>Keras</li>
-<li></li>
+<li>Keras 1.2.2</li>
+<li>Tensorflow</li>
 </ul>
 
 </div>
@@ -13046,6 +13046,9 @@ kiSpTRn4JEmSJKlNGfgkSZIkqU39//7bHoQFcGzFAAAAAElFTkSuQmCC
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="n">all_data_file</span> <span class="o">=</span> <span class="s2">&quot;./data/train.csv&quot;</span>
 <span class="n">rossmann_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">all_data_file</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;StateHoliday&quot;</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">},</span>
@@ -13491,7 +13494,7 @@ JEkVMUhKkiRJkipikJQkSZIkVeT/AxscIKWK2yP1AAAAAElFTkSuQmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">prepare_data</span> <span class="k">as</span> <span class="nn">raw_data</span>
@@ -13534,7 +13537,7 @@ Extract data from csv file completed.
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Prepare data for processing, including reformat, ordering, standanlize, encoding</span>
@@ -13581,7 +13584,7 @@ prepare data complete
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_ratio</span> <span class="o">=</span> <span class="mf">0.85</span>
@@ -13635,11 +13638,12 @@ prepare data complete
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_squared_error</span>
 
 <span class="c1"># RMSPE </span>
 <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">y_act</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">):</span>
@@ -13692,7 +13696,7 @@ prepare data complete
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_df_train_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
@@ -13702,7 +13706,7 @@ prepare data complete
 <span class="n">y_pred_all</span> <span class="o">=</span> <span class="n">all_estimator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_df_test_all</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_test</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_pred_all</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overall Testing error:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overall stores Linear regression - Testing error:&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 
@@ -13716,7 +13720,7 @@ prepare data complete
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Overall Testing error:
+<pre>Overall stores Linear regression - Testing error:
 0.458600051268
 </pre>
 </div>
@@ -13737,7 +13741,7 @@ prepare data complete
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">to_X_df</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -13775,7 +13779,7 @@ prepare data complete
 <span class="c1">#     print(&quot;Extended {} items&quot;.format(len(y_pred)))</span>
     
 <span class="n">result</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_observed</span><span class="p">),</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">y_predicts</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Testing error:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pre score Linear regression - Testing error:&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </pre></div>
 
@@ -13789,7 +13793,7 @@ prepare data complete
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Testing error:
+<pre>Pre score Linear regression - Testing error:
 0.162214296901
 </pre>
 </div>

@@ -162,6 +162,6 @@ def prepare_data_for_process():
     print(train_data_X[0], train_data_y[0])
     return train_data_X, train_data_y
 
-def prepare_data():
-    read_data_as_dicts()
-    prepare_data_for_process()
+
+read_data_as_dicts()
+# prepare_data_for_process()
