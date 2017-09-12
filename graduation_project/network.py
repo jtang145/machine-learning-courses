@@ -5,7 +5,7 @@ from keras.layers.core import Dense, Activation, Merge, Reshape
 from keras.layers.embeddings import Embedding
 
 # prepare final features for network, here we only takes 7 out of 8 initial features
-# ‘open’ is not so helpful for 
+# ‘open’ is not so helpful for prediction, refer to graduation document
 def split_features(X):
     X_list = []
 
