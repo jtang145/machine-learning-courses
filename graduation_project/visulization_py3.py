@@ -14,7 +14,7 @@ def load_data():
                       parse_dates=['Date'])
     # Format Sales data
     data.drop(['DayOfWeek'],axis = 1, inplace = True)
-    data.fillna('0')
+    # data.fillna('0')
     return data
 
 # View 'size' of store's
@@ -27,7 +27,7 @@ def viewSalesDataOverTime(data, group, aggregation= 'sum', size = 10):
     cols = 3
     rows = int(math.ceil(size / cols))
     rows = rows if rows > 0 else 0
-    print "row: %d, col: %s" % (rows, cols)
+    print("row: %d, col: %s" % (rows, cols))
     #fig, axes = plt.subplots(nrows = rows, ncols = cols)
     count = 0
     for i in stores:
@@ -39,7 +39,7 @@ def viewSalesDataOverTime(data, group, aggregation= 'sum', size = 10):
         elif aggregation == 'mean':
             temp_store = temp_store.resample(group).mean()
         else:
-            print "Not supported aggregation type: " + aggregation
+            print("Not supported aggregation type: " + aggregation)
             return
         plot_row_index = int(math.ceil(count / cols) - 1)
         #plot_row_index = plot_row_index if plot_row_index > 0 else 0
@@ -64,7 +64,7 @@ def select_store(data, store_id, group, aggregation):
     elif aggregation == 'mean':
         simple_data = simple_data.resample(group).mean()
     else:
-        print "Not supported aggregation type: " + aggregation
+        print ("Not supported aggregation type: " + aggregation)
         return
     simple_data.fillna(0)
     #reset store id
@@ -87,7 +87,8 @@ def viewStoreData(data, stores,group, aggregation = 'sum'):
         count = count + 1
         temp_store = select_store(data, i,group,aggregation)
         temp_store.reset_index(inplace = True)
-        plot_datas = plot_datas.append(temp_store)
+        # print(temp_store.head(2))
+        plot_datas = plot_datas.append(temp_store) #so the "Store" column should also be appended to plot_datas.
     plot_datas.sort_values("Date", ascending= True,inplace= True)
     g = sns.FacetGrid(plot_datas, col="Store", col_wrap = cols, size=2.5)
     g = g.map_dataframe(dateplot, "Date", "Sales")

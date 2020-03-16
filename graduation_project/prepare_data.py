@@ -64,7 +64,7 @@ def read_data_as_dicts():
     store_states = './data/store_states.csv'
     with open(train_data) as csvfile:
         data = csv.reader(csvfile, delimiter=',')
-        with open('train_data.pickle', 'wb') as f:
+        with open('train_data.pickle', "wb") as f:
             data = csv2dicts(data)
             # Let order by date descending
             data = data[::-1]
